@@ -15,7 +15,7 @@ namespace PLACT
         public MainForm()
         {
             InitializeComponent();
-            
+
             if (version is not "11" or "10")
             {
                 MessageBox.Show("This program only works on Windows 10 and Windows 11", "Incompatibiliity", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -34,7 +34,7 @@ namespace PLACT
                 groupBoxWinVersion.Text = "OS Detected : Windows " + version;
                 LoadComboBoxItems();
             }
-        }                                                   
+        }
 
         /// <summary>
         /// Get the Windows version
