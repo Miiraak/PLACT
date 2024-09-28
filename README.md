@@ -1,16 +1,11 @@
 # PLACT
 
 ## Description
-Plact is a small Windows Forms app that allow you to activate Windows 10/11 in 30 seconds.
+Plact is a standalone exe that allow you to activate Windows 10/11 in 2 click.
 
 ## Features
 - **Auto Licence Detection**: Detect if your OS is already activated. 
 - **Licence selection**: Choose the Windows version you need.
-
-## Prerequisites
-Before running the project, make sure you have the following installed:
-
-- [None]()
 
 ## Usage
 - Download the plact.exe file
