@@ -8,29 +8,33 @@ namespace PLACT
         /// <summary>
         /// These lists are used to store the Windows version and the corresponding key
         /// </summary>
-        private readonly List<string> windowsVersionList = [ "Home", "Home N", "Professional", "Professionnal N", "Education", "Education N", "Enterprise", "Enterprise N" ];
-        private readonly List<string> windows10KeyList = [ "TX9XD-98N7V-6WMQ6-BX7FG-H8Q99", "3KHY7-WNT83-DGQKR-F7HPR-844BM", "W269N-WFGWX-YVC9B-4J6C9-T83GX", "MH37W-N47XK-V7XM9-C7227-GCQG9", "NW6C2-QMPVW-D7KKK-3GKT6-VCFB2", "2WH4N-8QGBV-H22JP-CT43Q-MDWWJ", "NPPR9-FWDCX-D2C8J-H872K-2YT43", "DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4" ];
+        private readonly string version = GetWindowsVersion();
+        private readonly List<string> windowsVersionList = ["Home", "Home N", "Professional", "Professionnal N", "Education", "Education N", "Enterprise", "Enterprise N"];
+        private readonly List<string> windows10KeyList = ["TX9XD-98N7V-6WMQ6-BX7FG-H8Q99", "3KHY7-WNT83-DGQKR-F7HPR-844BM", "W269N-WFGWX-YVC9B-4J6C9-T83GX", "MH37W-N47XK-V7XM9-C7227-GCQG9", "NW6C2-QMPVW-D7KKK-3GKT6-VCFB2", "2WH4N-8QGBV-H22JP-CT43Q-MDWWJ", "NPPR9-FWDCX-D2C8J-H872K-2YT43", "DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4"];
 
         public MainForm()
         {
             InitializeComponent();
-            string version = GetWindowsVersion();
-
-            if (version is not "Windows 11" or "Windows 10")
+            
+            if (version is not "11" or "10")
             {
-                MessageBox.Show("This program only works on Windows 10 and Windows 11", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This program only works on Windows 10 and Windows 11", "Incompatibiliity", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
-
-            if (IsWindowsActivated())
+            else
             {
-                MessageBox.Show("Windows is already activated", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
-            }
+                if (IsWindowsActivated())
+                {
+                    if (MessageBox.Show($"Your Windows {version} is already activated", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.Cancel)
+                    {
+                        this.Close();
+                    }
+                }
 
-            groupBoxWinVersion.Text = "OS Detected : " + version;
-            LoadComboBoxItems(version);
-        }
+                groupBoxWinVersion.Text = "OS Detected : Windows " + version;
+                LoadComboBoxItems();
+            }
+        }                                                   
 
         /// <summary>
         /// Get the Windows version
@@ -41,9 +45,9 @@ namespace PLACT
             Version version = Environment.OSVersion.Version;
 
             if (version.Major == 10 && version.Build >= 22000)
-                return "Windows 11";
+                return "11";
             else if (version.Major == 10)
-                return "Windows 10";
+                return "10";
             else
                 return $"Unknown version: {version}";
         }
@@ -62,14 +66,13 @@ namespace PLACT
         /// <summary>
         /// Load the items in the ComboBox
         /// </summary>
-        /// <param name="version"></param>
-        private void LoadComboBoxItems(string version)
+        private void LoadComboBoxItems()
         {
-            if (version == "Windows 10")
+            if (version == "10")
             {
                 comboBoxLicence.DataSource = windowsVersionList;
             }
-            else if (version == "Windows 11")
+            else if (version == "11")
             {
                 comboBoxLicence.DataSource = windowsVersionList;
             }
@@ -87,16 +90,11 @@ namespace PLACT
         /// <param name="e"></param>
         private void ButtonActivate_Click(object sender, EventArgs e)
         {
-            if (comboBoxLicence.SelectedItem == null)
-            {
-                MessageBox.Show("Please select a licence", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (groupBoxWinVersion.Text == "OS Detected : Windows 10")
+            if (version == "10")
             {
                 RunCommand("slmgr /ipk " + windows10KeyList[comboBoxLicence.SelectedIndex]);
             }
-            else if (groupBoxWinVersion.Text == "OS Detected : Windows 11")
+            else if (version == "11")
             {
                 RunCommand("slmgr /ipk " + windows10KeyList[comboBoxLicence.SelectedIndex]);
             }
