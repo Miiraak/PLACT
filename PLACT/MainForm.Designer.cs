@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             labelUserLicence = new Label();
             label2 = new Label();
             groupBoxInformations = new GroupBox();
@@ -90,7 +91,7 @@
             // 
             // buttonRemoveKey
             // 
-            buttonRemoveKey.Location = new Point(107, 147);
+            buttonRemoveKey.Location = new Point(107, 146);
             buttonRemoveKey.Name = "buttonRemoveKey";
             buttonRemoveKey.Size = new Size(118, 23);
             buttonRemoveKey.TabIndex = 13;
@@ -231,7 +232,8 @@
             Controls.Add(label2);
             Cursor = Cursors.Cross;
             ForeColor = Color.Black;
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "MainForm";

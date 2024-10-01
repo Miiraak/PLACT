@@ -81,8 +81,7 @@ namespace PLACT
             using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false);
             if (registryKey != null)
             {
-                string EditionID = (string)registryKey.GetValue(keyName);
-                if (EditionID != null)
+                if (registryKey.GetValue(keyName) is string EditionID)
                 {
                     return EditionID;
                 }
@@ -150,8 +149,7 @@ namespace PLACT
             using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false);
             if (registryKey != null)
             {
-                string UserKey = (string)registryKey.GetValue(keyName);
-                if (UserKey != null)
+                if (registryKey.GetValue(keyName) is string UserKey)
                 {
                     return UserKey;
                 }
