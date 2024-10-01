@@ -78,15 +78,12 @@ namespace PLACT
             string keyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion";
             string keyName = "EditionID";
 
-            using (RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false))
+            using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false);
+            if (registryKey != null)
             {
-                if (registryKey != null)
+                if (registryKey.GetValue(keyName) is string EditionID)
                 {
-                    string EditionID = (string)registryKey.GetValue(keyName);
-                    if (EditionID != null)
-                    {
-                        return EditionID;
-                    }
+                    return EditionID;
                 }
             }
 
@@ -100,18 +97,15 @@ namespace PLACT
         static string IsWindowsActivated()
         {
             var searcher = new ManagementObjectSearcher("SELECT LicenseStatus FROM SoftwareLicensingProduct WHERE PartialProductKey IS NOT NULL");
-            foreach (ManagementObject obj in searcher.Get())
+            foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
                 uint licenseStatus = (uint)obj["LicenseStatus"];
-                switch (licenseStatus)
+                return licenseStatus switch
                 {
-                    case 0:
-                        return "Not licensed";
-                    case 1:
-                        return "Licensed";
-                    default:
-                        return "Unknown status";
-                }
+                    0 => "Not licensed",
+                    1 => "Licensed",
+                    _ => "Unknown status",
+                };
             }
 
             return "Status not found";
@@ -125,8 +119,8 @@ namespace PLACT
         {
             try
             {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT OA3xOriginalProductKey FROM SoftwareLicensingService");
-                foreach (ManagementObject obj in searcher.Get())
+                ManagementObjectSearcher searcher = new("SELECT OA3xOriginalProductKey FROM SoftwareLicensingService");
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     string? oemKey = obj["OA3xOriginalProductKey"]?.ToString();
                     if (!string.IsNullOrEmpty(oemKey))
@@ -152,15 +146,12 @@ namespace PLACT
             string keyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform";
             string keyName = "BackupProductKeyDefault";
 
-            using (RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false))
+            using RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(keyPath, false);
+            if (registryKey != null)
             {
-                if (registryKey != null)
+                if (registryKey.GetValue(keyName) is string UserKey)
                 {
-                    string UserKey = (string)registryKey.GetValue(keyName);
-                    if (UserKey != null)
-                    {
-                        return UserKey;
-                    }
+                    return UserKey;
                 }
             }
 
@@ -195,11 +186,29 @@ namespace PLACT
                 RunCommand("slmgr /ipk " + windows10KeyList[comboBoxLicence.SelectedIndex]);
                 RunCommand("slmgr /skms kms8.msguides.com");
                 RunCommand("slmgr /ato");
+
+                if (MessageBox.Show("Reboot needed\nWould you like to restart your computer now ?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    RunCommand("shutdown /r /t 0");
+                }
             }
             else
             {
                 MessageBox.Show("Unsupported Windows version", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Remove the licence from the registry and deactivate Windows licence.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonRemoveKey_Click(object sender, EventArgs e)
+        {
+            RunCommand("slmgr /upk");
+            RunCommand("slmgr /cpky");
+
+            MessageBox.Show("Licence have been removed", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>
