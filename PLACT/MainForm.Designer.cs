@@ -31,6 +31,7 @@
             labelUserLicence = new Label();
             label2 = new Label();
             groupBoxInformations = new GroupBox();
+            buttonRemoveKey = new Button();
             labelActivationStatus = new Label();
             labelEdition = new Label();
             labelWindowsVersion = new Label();
@@ -68,6 +69,7 @@
             // 
             // groupBoxInformations
             // 
+            groupBoxInformations.Controls.Add(buttonRemoveKey);
             groupBoxInformations.Controls.Add(labelActivationStatus);
             groupBoxInformations.Controls.Add(labelEdition);
             groupBoxInformations.Controls.Add(labelWindowsVersion);
@@ -81,10 +83,20 @@
             groupBoxInformations.Dock = DockStyle.Top;
             groupBoxInformations.Location = new Point(0, 0);
             groupBoxInformations.Name = "groupBoxInformations";
-            groupBoxInformations.Size = new Size(287, 153);
+            groupBoxInformations.Size = new Size(287, 179);
             groupBoxInformations.TabIndex = 5;
             groupBoxInformations.TabStop = false;
             groupBoxInformations.Text = "Informations";
+            // 
+            // buttonRemoveKey
+            // 
+            buttonRemoveKey.Location = new Point(107, 147);
+            buttonRemoveKey.Name = "buttonRemoveKey";
+            buttonRemoveKey.Size = new Size(118, 23);
+            buttonRemoveKey.TabIndex = 13;
+            buttonRemoveKey.Text = "Remove Key";
+            buttonRemoveKey.UseVisualStyleBackColor = true;
+            buttonRemoveKey.Click += ButtonRemoveKey_Click;
             // 
             // labelActivationStatus
             // 
@@ -174,7 +186,7 @@
             groupBoxWinVersion.Controls.Add(buttonActivate);
             groupBoxWinVersion.Controls.Add(comboBoxLicence);
             groupBoxWinVersion.Dock = DockStyle.Top;
-            groupBoxWinVersion.Location = new Point(0, 153);
+            groupBoxWinVersion.Location = new Point(0, 179);
             groupBoxWinVersion.Name = "groupBoxWinVersion";
             groupBoxWinVersion.Size = new Size(287, 80);
             groupBoxWinVersion.TabIndex = 6;
@@ -213,7 +225,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(287, 232);
+            ClientSize = new Size(287, 264);
             Controls.Add(groupBoxWinVersion);
             Controls.Add(groupBoxInformations);
             Controls.Add(label2);
@@ -250,5 +262,6 @@
         private Label labelActivationStatus;
         private Label labelEdition;
         private Label labelWindowsVersion;
+        private Button buttonRemoveKey;
     }
 }
